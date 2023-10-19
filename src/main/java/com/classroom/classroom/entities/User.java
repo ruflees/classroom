@@ -2,7 +2,6 @@ package com.classroom.classroom.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.boot.web.embedded.netty.NettyWebServer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +34,6 @@ public class User implements UserDetails {
     private String login;
     private String password;
 
-//    @Column(columnDefinition = "ENUM('ADMIN', 'USER')")
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
@@ -55,11 +53,6 @@ public class User implements UserDetails {
                     new SimpleGrantedAuthority("USER"));
         else return List.of(new SimpleGrantedAuthority("USER"));
     }
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(userRole.name()));
-//    }
 
     @Override
     public String getUsername() {

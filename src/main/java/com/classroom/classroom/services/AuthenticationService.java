@@ -28,14 +28,6 @@ public class AuthenticationService implements UserDetailsService {
 
     public User authenticateUserByLogin(String login, String password) {
         User user = (User) loadUserByUsername(login);
-        System.out.println(user.getLogin());
-//        var encryptedPassword = new BCryptPasswordEncoder().matches(password, user.getPassword());
-//        System.out.println(encryptedPassword);
-        System.out.println(new BCryptPasswordEncoder().matches(password, user.getPassword()));
-        System.out.println(user.getPassword());
-//        if (user.getPassword() != encryptedPassword){
-//            return null;
-//        }
         if (!new BCryptPasswordEncoder().matches(password, user.getPassword())){
             return null;
         }
