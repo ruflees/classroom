@@ -1,10 +1,7 @@
 package com.classroom.classroom.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.boot.web.embedded.netty.NettyWebServer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,12 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+
+
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 public class User implements UserDetails {
 
     @Id
@@ -31,23 +32,38 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    private String email;
+    private String login;
     private String password;
 
+//    @Column(columnDefinition = "ENUM('ADMIN', 'USER')")
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
+
+    public User(String firstName, String lastName, String login, String password, UserRole role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.login = login;
+        this.password = password;
+        this.userRole = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.userRole == UserRole.ADMIN)
             return List.of(
-                    new SimpleGrantedAuthority("ROLE_ADMIN"),
-                    new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+                    new SimpleGrantedAuthority("ADMIN"),
+                    new SimpleGrantedAuthority("USER"));
+        else return List.of(new SimpleGrantedAuthority("USER"));
     }
+
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of(new SimpleGrantedAuthority(userRole.name()));
+//    }
 
     @Override
     public String getUsername() {
-        return email;
+        return login;
     }
 
     @Override
